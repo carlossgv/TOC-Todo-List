@@ -2,12 +2,45 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: #DBDBDC;
+}
+
+@media (min-width: 30rem) {
+    .tasks {
+        width: 50vw;
+    }
+}
+
+.menu, .tasks, .task-info {
+    border: 2px solid black;
+    height: 100vh;
+    padding: 1rem;
+}
+
+.menu {
+    width: 16rem;
+    background-color: #27282a;
+}
+
+.tasks, .task-info {
+    background-color: #242424;
 }
 
 .todo-app {
     display: flex;
 }
 
-.menu {
-    width: 16rem;
+
+
+
+#no-task-logo {
+    width: 40%;
 }
+
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+

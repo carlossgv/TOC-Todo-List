@@ -8,5 +8,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   devtool: 'source-map',
+  watchOptions: {
+    aggregateTimeout: 600,
+  },
   
 };
