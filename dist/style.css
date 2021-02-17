@@ -7,3 +7,7 @@
 .todo-app {
     display: flex;
 }
+
+.menu {
+    width: 16rem;
+}
