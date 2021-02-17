@@ -17268,11 +17268,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 
 
-$(document).ready(()=>{
+$(document).ready(() => {
+  setName();
 
-    
-    console.log('Document Loaded!')
-})
+  const name = localStorage.getItem('name');
+
+  $('.user-info').html(`${name}'s Projects`);
+
+  console.log('Document Loaded!!');
+});
+
+let setName = () => {
+  if (localStorage.getItem('name') === null) {
+    const name = prompt("What's your name?");
+    if (name === '' || name === null) {
+      setName();
+    } else {
+      localStorage.setItem('name', name);
+    }
+  }
+};
+
 })();
 
 /******/ })()
