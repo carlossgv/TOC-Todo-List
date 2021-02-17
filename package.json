@@ -1,0 +1,29 @@
+{
+  "name": "TOC-todo-List",
+  "version": "1.0.0",
+  "description": "Todo List Project from The Odin Project",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlossgv/TOC-Todo-List.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carlossgv/TOC-Todo-List/issues"
+  },
+  "homepage": "https://github.com/carlossgv/TOC-Todo-List#readme",
+  "devDependencies": {
+    "webpack": "^5.22.0",
+    "webpack-cli": "^4.5.0"
+  },
+  "dependencies": {
+    "date-fns": "^2.17.0",
+    "lodash": "^4.17.20"
+  }
+}
