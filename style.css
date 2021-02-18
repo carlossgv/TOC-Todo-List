@@ -1,46 +1,53 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    color: #DBDBDC;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #dbdbdc;
 }
 
 @media (min-width: 30rem) {
-    .tasks {
-        width: 50vw;
-    }
+  .tasks {
+    width: 50vw;
+  }
 }
 
-.menu, .tasks, .task-info {
-    border: 2px solid black;
-    height: 100vh;
-    padding: 1rem;
+.hidden {
+  display: none;
+}
+
+option {
+  color: black;
+}
+
+.menu,
+.tasks,
+.task-info {
+  border: 2px solid black;
+  height: 100vh;
+  padding: 1rem;
 }
 
 .menu {
-    width: 16rem;
-    background-color: #27282a;
+  width: 16rem;
+  background-color: #27282a;
 }
 
-.tasks, .task-info {
-    background-color: #242424;
+.tasks,
+.task-info {
+  background-color: #242424;
 }
 
 .todo-app {
-    display: flex;
+  display: flex;
 }
 
-
-
-
 #no-task-logo {
-    width: 40%;
+  width: 40%;
 }
 
 .centered-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
-
