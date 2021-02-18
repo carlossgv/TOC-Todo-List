@@ -17278,35 +17278,17 @@ $(document).ready(() => {
     e.preventDefault();
   });
 
-  // console.log(JSON.parse(window.localStorage.getItem('projectsList')));
+  $('form[name="add-task"]').submit(function (e) {
+    console.log(e.target[0].value);
+    addNewTask(e.target[0].value);
+    e.target[0].value = '';
+    e.preventDefault();
+  });
 
   loadProjects();
 
   console.log('Document Loaded!!!');
 });
-
-// loadProjects if false wont add doms again, just return lists
-const loadProjects = (run = true) => {
-  if (JSON.parse(window.localStorage.getItem('projectsList'))) {
-    let projectsList = JSON.parse(window.localStorage.getItem('projectsList'));
-    let projectsListNames = JSON.parse(
-      window.localStorage.getItem('projectsListNames')
-    );
-
-    if (run) {
-      projectsList.forEach((element) => {
-        addProjectDOM(element.name);
-      });
-    }
-
-    return { projectsList, projectsListNames };
-  } else {
-    let projectsList = [];
-    let projectsListNames = [];
-
-    return { projectsList, projectsListNames };
-  }
-};
 
 class Project {
   constructor(name) {
@@ -17316,6 +17298,10 @@ class Project {
 
   addTask(task) {
     this.tasks.push(task);
+  }
+
+  getName() {
+    return this.name;
   }
 }
 
@@ -17329,29 +17315,18 @@ class Task {
   }
 }
 
-const addNewProject = (name) => {
-  let lists = loadProjects(false);
-
-  if (name == '' || name == null) {
-    console.log('Proyect needs a name');
-  } else if (lists.projectsListNames.includes(name)) {
-    console.log('Proyect already exists');
+const addNewTask = (
+  project,
+  title,
+  description = '',
+  dueDate = 'Today',
+  priority = 'Medium'
+) => {
+  let newTask = new Task(project, title, description, dueDate, priority);
+  if (title == '' || title == null) {
+    console.log('Task needs a name');
   } else {
-    lists.projectsListNames.push(name);
-
-    let newProyect = new Project(name);
-    lists.projectsList.push(newProyect);
-
-    addProjectDOM(name);
-
-    window.localStorage.setItem(
-      'projectsList',
-      JSON.stringify(lists.projectsList)
-    );
-    window.localStorage.setItem(
-      'projectsListNames',
-      JSON.stringify(lists.projectsListNames)
-    );
+    project.addTask(newTask);
   }
 };
 
@@ -17363,12 +17338,22 @@ const addProjectDOM = (name) => {
 
   const p = document.createElement('p');
   p.classList.add('project-name');
-  p.setAttribute('id', `project-${name}`);
+
+  const id = `project-${name.replace(/ /, '-').toLowerCase()}`;
+  p.setAttribute('id', id);
   p.innerHTML = name;
 
   div.append(p);
-
   projects.append(div);
+
+  addProjectFunctions($(`#${id}`));
+};
+
+const addProjectFunctions = (dom) => {
+  dom.on('click', function (e) {
+    loadTasks(e.target.innerHTML);
+    e.preventDefault();
+  });
 };
 
 const setName = () => {
@@ -17381,7 +17366,65 @@ const setName = () => {
     }
   }
   const name = localStorage.getItem('name');
-  $('.user-info').html(`${name}'s Projects`);
+
+  if (name.charAt(name.length - 1) === 's') {
+    $('.user-info').html(`${name}' Projects`);
+  } else {
+    $('.user-info').html(`${name}'s Projects`);
+  }
+};
+
+const loadTasks = (name) => {
+  if (name.charAt(name.length - 1) === 's') {
+    $('.tasks-list-title').html(`${name}' Tasks`);
+  } else {
+    $('.tasks-list-title').html(`${name}'s Tasks`);
+  }
+};
+
+const addNewProject = (name) => {
+  let projectsList = loadProjects(false);
+
+  for (let i in projectsList) {
+    if (name === projectsList[i].name) {
+      return console.log('Proyect already exists');
+    }
+  }
+
+  if (name == '' || name == null) {
+    console.log('Proyect needs a name');
+  } else {
+    let newProyect = new Project(name);
+    projectsList.push(newProyect);
+
+    addProjectDOM(name);
+
+    window.localStorage.setItem('projectsList', JSON.stringify(projectsList));
+  }
+};
+
+// loadProjects if false wont add doms again, just return lists
+const loadProjects = (run = true) => {
+  let projectsList = [];
+
+  if (JSON.parse(window.localStorage.getItem('projectsList'))) {
+    let tempProjectsList = JSON.parse(
+      window.localStorage.getItem('projectsList')
+    );
+
+    tempProjectsList.forEach((element) => {
+      let project = new Project(element.name);
+      projectsList.push(project);
+      if (run) {
+        addProjectDOM(element.name);
+      }
+    });
+
+    console.log('Projects Loaded', projectsList)
+    return projectsList;
+  } else {
+    return projectsList;
+  }
 };
 
 })();
