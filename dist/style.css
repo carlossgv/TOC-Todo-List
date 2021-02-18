@@ -3,6 +3,11 @@
   padding: 0;
   box-sizing: border-box;
   color: #dbdbdc;
+  background-color: #242424;
+}
+
+body {
+    height: 100vh;
 }
 
 @media (min-width: 30rem) {
@@ -32,10 +37,10 @@ option {
   background-color: #27282a;
 }
 
-.tasks,
+/* .tasks,
 .task-info {
   background-color: #242424;
-}
+} */
 
 .todo-app {
   display: flex;
