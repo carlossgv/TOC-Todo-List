@@ -5,7 +5,6 @@ $(document).ready(() => {
   setName();
 
   $('form[name="add-project"]').submit(function (e) {
-    
     addNewProject(e.target[0].value);
     e.target[0].value = '';
     e.preventDefault();
@@ -23,7 +22,7 @@ $(document).ready(() => {
     e.preventDefault();
   });
 
-  $('#new-task-input').click(function (e) {
+  $('#new-task-input').focus(function (e) {
     showNewTaskOptions();
     e.preventDefault();
   });
@@ -73,7 +72,7 @@ const addProjectDOM = (name) => {
   const p = document.createElement('p');
   p.classList.add('project-name');
 
-  const id = `project-${name.replace(/ /, '-').toLowerCase()}`;
+  const id = `project-${_.kebabCase(name)}`;
   p.setAttribute('id', id);
   p.innerHTML = name;
 
@@ -85,37 +84,43 @@ const addProjectDOM = (name) => {
 
 const addProjectFunctions = (dom) => {
   dom.on('click', function (e) {
-    loadTasks(e.target.innerHTML);
+    let projectsList = loadProjects(false);
+
+    projectsList.forEach((project) => {
+      if (e.target.innerHTML === project.name) {
+        loadTasks(project);
+      }
+    });
+
     e.preventDefault();
   });
 };
 
-const addNewProject = (name) => {
+const addNewProject = (projectName) => {
   let projectsList = loadProjects(false);
 
   for (let i in projectsList) {
-    if (name === projectsList[i].name) {
+    if (projectName === projectsList[i].name) {
       return alert('Proyect already exists, please enter another name');
     }
   }
 
-  if (name == '' || name == null) {
+  if (projectName == '' || projectName == null) {
     console.log('Proyect needs a name');
   } else {
-    let newProyect = new Project(name);
+    let newProyect = new Project(projectName);
     projectsList.push(newProyect);
 
-    addProjectDOM(name);
+    addProjectDOM(projectName);
 
     window.localStorage.setItem('projectsList', JSON.stringify(projectsList));
 
-    loadTasks(name);
+    loadTasks(newProyect);
   }
 };
 
 const addNewTask = (title, description, dueDate, priority) => {
   let projectName = $('.tasks-list-title').html().split("'")[0];
-  
 
   if (title == '' || title == null) {
     console.log('Task needs a name');
@@ -130,7 +135,7 @@ const addNewTask = (title, description, dueDate, priority) => {
 
         project.tasks.forEach((projectTask) => {
           if (projectTask.title === title) {
-            console.log('Task already created');
+            alert('Task already created');
             project = false;
           }
         });
@@ -146,7 +151,7 @@ const addNewTask = (title, description, dueDate, priority) => {
 
       window.localStorage.setItem('projectsList', JSON.stringify(projectsList));
       $('.new-task-details').addClass('hidden');
-      loadTasks(project.name);
+      loadTasks(project);
     }
   }
 };
@@ -181,23 +186,19 @@ const loadProjects = (run = true) => {
 };
 
 // loadTasks if false wont add doms again, just return lists
-const loadTasks = (name, run = true) => {
+const loadTasks = (project) => {
   $('.tasks-list').empty();
 
-  if (name.charAt(name.length - 1) === 's') {
-    $('.tasks-list-title').html(`${name}' Tasks`);
+  if (project.name.charAt(project.name.length - 1) === 's') {
+    $('.tasks-list-title').html(`${project.name}' Tasks`);
   } else {
-    $('.tasks-list-title').html(`${name}'s Tasks`);
+    $('.tasks-list-title').html(`${project.name}'s Tasks`);
+
+    console.log(project.tasks);
   }
 
-  let projectsList = loadProjects(false);
-
-  projectsList.forEach((project) => {
-    if (project.name === name) {
-      project.tasks.forEach((task) => {
-        addTaskDOM(task, project);
-      });
-    }
+  project.tasks.forEach((task) => {
+    addTaskDOM(task, project);
   });
 };
 
@@ -210,20 +211,29 @@ const addTaskDOM = (task, project) => {
   const p = document.createElement('p');
   p.classList.add('task-name');
 
-  const id = `${project.name
-    .replace(/ /, '-')
-    .toLowerCase()}-task-${task.title.replace(/ /, '-').toLowerCase()}`;
+  const id = `${_.kebabCase(project.name)}-${_.kebabCase(task.title)}`;
   p.setAttribute('id', id);
   p.innerHTML = task.title;
 
   div.append(p);
+
+  let p2 = document.createElement('p');
+  p2.classList.add('task-dueDate');
+
+  
+  p2.innerHTML = task.dueDate;
+
+  div.append(p2);
+
   tasks.append(div);
 
   addTaskFunctions($(`#${id}`));
+  console.log('im adding tasks doms');
 };
 
 const addTaskFunctions = (dom) => {
   dom.on('click', function (e) {
+    console.log('im adding task functions');
     loadTaskDetails(e.target.innerHTML);
     e.preventDefault();
   });
@@ -268,28 +278,31 @@ const addTaskDetailsDOM = (task, project) => {
   $('#edit-task-description').val(task.description);
 
   $('.delete-task-button').click(function (e) {
-    let projectsList = loadProjects(false);
-    console.log('ENTERING DELETE', projectsList)
-    let index = _.findIndex(projectsList, project);
-    $(
-      `#${project.name
-        .replace(/ /, '-')
-        .toLowerCase()}-task-${task.title.replace(/ /, '-').toLowerCase()}`
-    ).remove();
-
-    let cleanedTasks = project.removeTask(task);
-    project.tasks = cleanedTasks;
-
-    projectsList.splice(index, 1, project);
-
-    console.log('LEAVING DELETE', projectsList)
-    window.localStorage.setItem('projectsList', JSON.stringify(projectsList));
-
-    $('.task-selected').addClass('hidden');
-    $('.no-task-selected').removeClass('hidden');
-
+    deleteTask(task, project);
     e.preventDefault();
   });
+};
+
+const deleteTask = (task, project) => {
+  // Storage handling
+  let projectsList = loadProjects(false);
+  let index = _.findIndex(projectsList, project);
+
+  let cleanedTasks = project.removeTask(task);
+  project.tasks = cleanedTasks;
+
+  projectsList.splice(index, 1, project);
+  console.log(project);
+
+  console.log('before saving', projectsList);
+
+  window.localStorage.setItem('projectsList', JSON.stringify(projectsList));
+
+  // DOM handling
+  $(`#${_.kebabCase(project.name)}-${_.kebabCase(task.title)}`).remove();
+
+  $('.task-selected').addClass('hidden');
+  $('.no-task-selected').removeClass('hidden');
 };
 
 const setName = () => {

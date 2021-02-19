@@ -2,12 +2,30 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: #dbdbdc;
-  background-color: #242424;
 }
 
 body {
-    height: 100vh;
+  height: 100vh;
+}
+
+input, select, textarea, option, .datepicker {
+  background-color: #333436!important;
+  border: none!important;
+  color: #C9D7DE!important;
+}
+
+form div {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-header {
+  margin-bottom: 1rem;
+  border-bottom: 4px solid;
+}
+
+button {
+  width: 100%;
 }
 
 @media (min-width: 30rem) {
@@ -30,6 +48,8 @@ option {
   border: 2px solid black;
   height: 100vh;
   padding: 1rem;
+  background-color: #242424;
+  color: #dbdbdc;
 }
 
 .menu {
@@ -37,13 +57,24 @@ option {
   background-color: #27282a;
 }
 
-/* .tasks,
-.task-info {
-  background-color: #242424;
-} */
+.project-div {
+  background-color: #27282a;
+  font-weight: bold;
+}
 
 .todo-app {
   display: flex;
+}
+
+.task-div, .project-div {
+  border-bottom: #333436 2px solid;
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.task-name, .project-name {
+  margin: auto 0;
 }
 
 #no-task-logo {
