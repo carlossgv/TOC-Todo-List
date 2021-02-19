@@ -22,7 +22,7 @@ $(document).ready(() => {
     e.preventDefault();
   });
 
-  $('#new-task-input').click(function (e) {
+  $('#new-task-input').focus(function (e) {
     showNewTaskOptions();
     e.preventDefault();
   });
@@ -131,11 +131,9 @@ const addNewTask = (title, description, dueDate, priority) => {
     let project = '';
     projectsList.forEach((element) => {
       if (element.name === projectName) {
-      
         project = element;
 
         project.tasks.forEach((projectTask) => {
-
           if (projectTask.title === title) {
             alert('Task already created');
             project = false;
@@ -200,7 +198,6 @@ const loadTasks = (project) => {
   }
 
   project.tasks.forEach((task) => {
-
     addTaskDOM(task, project);
   });
 };
@@ -219,6 +216,15 @@ const addTaskDOM = (task, project) => {
   p.innerHTML = task.title;
 
   div.append(p);
+
+  let p2 = document.createElement('p');
+  p2.classList.add('task-dueDate');
+
+  
+  p2.innerHTML = task.dueDate;
+
+  div.append(p2);
+
   tasks.append(div);
 
   addTaskFunctions($(`#${id}`));
