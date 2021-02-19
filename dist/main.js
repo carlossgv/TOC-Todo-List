@@ -17567,7 +17567,7 @@ const deleteTask = (task, project) => {
   window.localStorage.setItem('projectsList', JSON.stringify(projectsList));
 
   // DOM handling
-  $(`#${lodash__WEBPACK_IMPORTED_MODULE_0___default().kebabCase(project.name)}-${lodash__WEBPACK_IMPORTED_MODULE_0___default().kebabCase(task.title)}`).remove();
+  $(`#${lodash__WEBPACK_IMPORTED_MODULE_0___default().kebabCase(project.name)}-${lodash__WEBPACK_IMPORTED_MODULE_0___default().kebabCase(task.title)}`).parent().remove();
 
   $('.task-selected').addClass('hidden');
   $('.no-task-selected').removeClass('hidden');

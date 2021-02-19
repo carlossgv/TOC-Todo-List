@@ -299,7 +299,7 @@ const deleteTask = (task, project) => {
   window.localStorage.setItem('projectsList', JSON.stringify(projectsList));
 
   // DOM handling
-  $(`#${_.kebabCase(project.name)}-${_.kebabCase(task.title)}`).remove();
+  $(`#${_.kebabCase(project.name)}-${_.kebabCase(task.title)}`).parent().remove();
 
   $('.task-selected').addClass('hidden');
   $('.no-task-selected').removeClass('hidden');
