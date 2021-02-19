@@ -8,6 +8,26 @@ body {
   height: 100vh;
 }
 
+input, select, textarea, option, .datepicker {
+  background-color: #333436!important;
+  border: none!important;
+  color: #C9D7DE!important;
+}
+
+form div {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-header {
+  margin-bottom: 1rem;
+  border-bottom: 4px solid;
+}
+
+button {
+  width: 100%;
+}
+
 @media (min-width: 30rem) {
   .tasks {
     width: 50vw;
@@ -39,10 +59,22 @@ option {
 
 .project-div {
   background-color: #27282a;
+  font-weight: bold;
 }
 
 .todo-app {
   display: flex;
+}
+
+.task-div, .project-div {
+  border-bottom: #333436 2px solid;
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.task-name, .project-name {
+  margin: auto 0;
 }
 
 #no-task-logo {
