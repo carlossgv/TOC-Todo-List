@@ -4,14 +4,27 @@
   box-sizing: border-box;
 }
 
+.signIn,
+.signOut {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
 body {
   height: 100vh;
 }
 
-input, select, textarea, option, .datepicker {
-  background-color: #333436!important;
-  border: none!important;
-  color: #C9D7DE!important;
+input,
+select,
+textarea,
+option,
+.datepicker {
+  background-color: #333436 !important;
+  border: none !important;
+  color: #c9d7de !important;
 }
 
 form div {
@@ -66,14 +79,16 @@ option {
   display: flex;
 }
 
-.task-div, .project-div {
+.task-div,
+.project-div {
   border-bottom: #333436 2px solid;
   padding: 0.5rem 0;
   display: flex;
   justify-content: space-between;
 }
 
-.task-name, .project-name {
+.task-name,
+.project-name {
   margin: auto 0;
 }
 

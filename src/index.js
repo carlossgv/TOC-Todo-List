@@ -1,8 +1,96 @@
 import _ from 'lodash';
-import { formatDistance, subDays } from 'date-fns';
+// Firebase App (the core Firebase SDK) is always required and must be listed first
+import firebase from 'firebase/app';
+// If you are using v7 or any earlier version of the JS SDK, you should import firebase using namespace import
+// import * as firebase from "firebase/app"
+
+// If you enabled Analytics in your project, add the Firebase SDK for Analytics
+import 'firebase/analytics';
+
+// Add the Firebase products that you want to use
+import 'firebase/auth';
+import 'firebase/firestore';
+
+// TODO: Replace the following with your app's Firebase project configuration
+// For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: 'AIzaSyCSOZ6py03AcM44fude2njzMXvtiMfRfWQ',
+  authDomain: 'toc-todo-list.firebaseapp.com',
+  projectId: 'toc-todo-list',
+  storageBucket: 'toc-todo-list.appspot.com',
+  messagingSenderId: '1027561303112',
+  appId: '1:1027561303112:web:c931594071adf813e9fc7d',
+  measurementId: 'G-WE67207W8H',
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+var provider = new firebase.auth.GoogleAuthProvider();
+
+const googleSignOut = () => {
+  console.log('entering sign out');
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      location.reload();
+    })
+    .catch((error) => {
+      // An error happened.
+    });
+};
+
+const googleSignIn = () => {
+  console.log('entering sign in');
+  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then((result) => {
+      /** @type {firebase.auth.OAuthCredential} */
+      var credential = result.credential;
+
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      // ...
+      console.log(user);
+      $('.user-info').html(`${user.displayName}' Projects`);
+      $('.signIn').addClass('hidden');
+      $('.signOut').removeClass('hidden');
+      $('.signOut').click(function () {
+        googleSignOut();
+      });
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
+};
 
 $(document).ready(() => {
-  setName();
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      $('.user-info').html(`${user.displayName}' Projects`);
+      $('.signIn').click(function (e) {
+        googleSignOut();
+      });
+    } else {
+      // User is signed out
+      $('.signIn').html('Sign in with Google');
+      $('.signIn').click(function (e) {
+        googleSignIn();
+      });
+    }
+  });
 
   $('form[name="add-project"]').submit(function (e) {
     addNewProject(e.target[0].value);
@@ -220,7 +308,6 @@ const addTaskDOM = (task, project) => {
   let p2 = document.createElement('p');
   p2.classList.add('task-dueDate');
 
-  
   p2.innerHTML = task.dueDate;
 
   div.append(p2);
@@ -299,7 +386,9 @@ const deleteTask = (task, project) => {
   window.localStorage.setItem('projectsList', JSON.stringify(projectsList));
 
   // DOM handling
-  $(`#${_.kebabCase(project.name)}-${_.kebabCase(task.title)}`).parent().remove();
+  $(`#${_.kebabCase(project.name)}-${_.kebabCase(task.title)}`)
+    .parent()
+    .remove();
 
   $('.task-selected').addClass('hidden');
   $('.no-task-selected').removeClass('hidden');
